@@ -1,6 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { GraduationCap, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import { navItems } from "./nav-items";
 
 export function Brand() {
@@ -19,6 +22,19 @@ export function Brand() {
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function handleSignOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    onNavigate?.();
+    navigate({ to: "/login", replace: true });
+  }
   return (
     <div className="flex h-full flex-col gap-6 bg-sidebar p-4 text-sidebar-foreground">
       <Brand />
@@ -43,13 +59,15 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           );
         })}
       </nav>
-      <Link
-        to="/"
-        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm opacity-80 hover:bg-sidebar-accent"
+      <button
+        type="button"
+        onClick={handleSignOut}
+        disabled={signingOut}
+        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm opacity-80 hover:bg-sidebar-accent disabled:opacity-50"
       >
         <LogOut className="h-4 w-4" />
-        تسجيل الخروج
-      </Link>
+        {signingOut ? "جارٍ الخروج..." : "تسجيل الخروج"}
+      </button>
     </div>
   );
 }

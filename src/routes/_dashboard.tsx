@@ -1,12 +1,20 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SidebarNav } from "@/components/layout/AppSidebar";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_dashboard")({
+  // Session lives in browser storage, so the gate runs client-side only.
+  ssr: false,
+  beforeLoad: async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) throw redirect({ to: "/login", replace: true });
+    return { user: data.user };
+  },
   component: DashboardLayout,
 });
 
