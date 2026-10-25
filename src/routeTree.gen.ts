@@ -9,27 +9,228 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/_dashboard'
+import { Route as DashboardAttendanceRouteImport } from './routes/_dashboard.attendance'
+import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
+import { Route as DashboardExamsRouteImport } from './routes/_dashboard.exams'
+import { Route as DashboardGradesRouteImport } from './routes/_dashboard.grades'
+import { Route as DashboardGroupsRouteImport } from './routes/_dashboard.groups'
+import { Route as DashboardSettingsRouteImport } from './routes/_dashboard.settings'
+import { Route as DashboardStudentsRouteImport } from './routes/_dashboard.students'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/_dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardAttendanceRoute = DashboardAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardExamsRoute = DashboardExamsRouteImport.update({
+  id: '/exams',
+  path: '/exams',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardGradesRoute = DashboardGradesRouteImport.update({
+  id: '/grades',
+  path: '/grades',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardGroupsRoute = DashboardGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardStudentsRoute = DashboardStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/attendance': typeof DashboardAttendanceRoute
+  '/dashboard': typeof DashboardDashboardRoute
+  '/exams': typeof DashboardExamsRoute
+  '/grades': typeof DashboardGradesRoute
+  '/groups': typeof DashboardGroupsRoute
+  '/settings': typeof DashboardSettingsRoute
+  '/students': typeof DashboardStudentsRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/attendance': typeof DashboardAttendanceRoute
+  '/dashboard': typeof DashboardDashboardRoute
+  '/exams': typeof DashboardExamsRoute
+  '/grades': typeof DashboardGradesRoute
+  '/groups': typeof DashboardGroupsRoute
+  '/settings': typeof DashboardSettingsRoute
+  '/students': typeof DashboardStudentsRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_dashboard': typeof DashboardRouteWithChildren
+  '/_dashboard/attendance': typeof DashboardAttendanceRoute
+  '/_dashboard/dashboard': typeof DashboardDashboardRoute
+  '/_dashboard/exams': typeof DashboardExamsRoute
+  '/_dashboard/grades': typeof DashboardGradesRoute
+  '/_dashboard/groups': typeof DashboardGroupsRoute
+  '/_dashboard/settings': typeof DashboardSettingsRoute
+  '/_dashboard/students': typeof DashboardStudentsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths:
+    | '/'
+    | '/attendance'
+    | '/dashboard'
+    | '/exams'
+    | '/grades'
+    | '/groups'
+    | '/settings'
+    | '/students'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to:
+    | '/'
+    | '/attendance'
+    | '/dashboard'
+    | '/exams'
+    | '/grades'
+    | '/groups'
+    | '/settings'
+    | '/students'
+  id:
+    | '__root__'
+    | '/'
+    | '/_dashboard'
+    | '/_dashboard/attendance'
+    | '/_dashboard/dashboard'
+    | '/_dashboard/exams'
+    | '/_dashboard/grades'
+    | '/_dashboard/groups'
+    | '/_dashboard/settings'
+    | '/_dashboard/students'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dashboard': {
+      id: '/_dashboard'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dashboard/attendance': {
+      id: '/_dashboard/attendance'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof DashboardAttendanceRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/dashboard': {
+      id: '/_dashboard/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardDashboardRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/exams': {
+      id: '/_dashboard/exams'
+      path: '/exams'
+      fullPath: '/exams'
+      preLoaderRoute: typeof DashboardExamsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/grades': {
+      id: '/_dashboard/grades'
+      path: '/grades'
+      fullPath: '/grades'
+      preLoaderRoute: typeof DashboardGradesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/groups': {
+      id: '/_dashboard/groups'
+      path: '/groups'
+      fullPath: '/groups'
+      preLoaderRoute: typeof DashboardGroupsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/settings': {
+      id: '/_dashboard/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/students': {
+      id: '/_dashboard/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof DashboardStudentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+  }
+}
+
+interface DashboardRouteChildren {
+  DashboardAttendanceRoute: typeof DashboardAttendanceRoute
+  DashboardDashboardRoute: typeof DashboardDashboardRoute
+  DashboardExamsRoute: typeof DashboardExamsRoute
+  DashboardGradesRoute: typeof DashboardGradesRoute
+  DashboardGroupsRoute: typeof DashboardGroupsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardStudentsRoute: typeof DashboardStudentsRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAttendanceRoute: DashboardAttendanceRoute,
+  DashboardDashboardRoute: DashboardDashboardRoute,
+  DashboardExamsRoute: DashboardExamsRoute,
+  DashboardGradesRoute: DashboardGradesRoute,
+  DashboardGroupsRoute: DashboardGroupsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardStudentsRoute: DashboardStudentsRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
