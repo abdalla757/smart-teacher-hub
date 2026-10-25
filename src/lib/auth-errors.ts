@@ -1,5 +1,5 @@
 // Maps Supabase Auth errors to clear Arabic messages.
-type AuthLikeError = { message?: string; code?: string; status?: number; name?: string } | null | undefined;
+type AuthLikeError = { message?: string; code?: string | undefined; status?: number | undefined; name?: string } | null | undefined;
 
 export const AUTH_MESSAGES = {
   invalidCredentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
