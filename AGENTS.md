@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Authenticated app pages live under the pathless `_dashboard` layout (custom RTL sidebar in src/components/layout); nav items are defined once in nav-items.ts.
