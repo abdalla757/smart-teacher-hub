@@ -1,0 +1,1 @@
+revoke execute on function public.fn_validate_group_membership_teacher(), public.fn_validate_attendance_session_teacher(), public.fn_validate_exam_teacher(), public.fn_validate_attendance_record(), public.fn_validate_grade_record(), public.fn_handle_new_teacher() from public, anon, authenticated;
