@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
+import { FullPageLoader } from "@/components/layout/FullPageLoader";
 import { useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,14 @@ export const Route = createFileRoute("/login")({
       { property: "og:description", content: "سجّل دخولك إلى منصة المعلم الذكي لإدارة فصولك." },
     ],
   }),
+  ssr: false,
+  // Already signed in (e.g. after a refresh): go straight to the dashboard.
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) throw redirect({ to: "/dashboard", replace: true });
+  },
+  pendingMs: 0,
+  pendingComponent: () => <FullPageLoader />,
   component: Login,
 });
 
