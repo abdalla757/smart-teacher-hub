@@ -6,15 +6,21 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SidebarNav } from "@/components/layout/AppSidebar";
 import { supabase } from "@/integrations/supabase/client";
+import { FullPageLoader } from "@/components/layout/FullPageLoader";
 
 export const Route = createFileRoute("/_dashboard")({
   // Session lives in browser storage, so the gate runs client-side only.
   ssr: false,
+  // getSession() waits for the client to finish restoring the stored session
+  // (and refreshing an expired token) before we decide. Only a confirmed
+  // missing session redirects; a network hiccup no longer logs the teacher out.
   beforeLoad: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/login", replace: true });
-    return { user: data.user };
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/login", replace: true });
+    return { user: data.session.user };
   },
+  pendingMs: 0,
+  pendingComponent: () => <FullPageLoader />,
   component: DashboardLayout,
 });
 
