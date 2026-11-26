@@ -1,50 +1,61 @@
-# Smart Teacher Hub
+# Smart Teacher Hub (المعلم الذكي)
 
-Build a professional Arabic RTL web application called Smart Teacher MVP.
+The web app for the Smart Teacher project: a platform for teachers and tutoring centers in Egypt who run large groups of students. It is part of a graduation project. The Arabic, right-to-left interface lets a teacher sign up, sign in, and move around a dashboard. The planning for the whole system (registration, QR attendance, exams, grades, parent communication) lives in the companion repo [smart-teacher-mvp](https://github.com/abdalla757/smart-teacher-mvp).
 
-This is only the foundation. Create:
+> **Status: early foundation.** Authentication, the app shell and the database schema exist. The feature pages (students, groups, attendance, exams, grades, settings) are placeholders. The dashboard shows empty stat cards, and no feature page reads or writes data yet.
 
-- A clean responsive dashboard layout
+## What works today
 
-- Arabic RTL interface
+- Sign up (full name, email, password) and sign in with Supabase Auth, with Arabic error messages. A new auth user gets a teacher profile through a database trigger.
+- A protected dashboard layout with a responsive RTL sidebar. Signed-in users reach it; the pages sit under one `_dashboard` layout route.
+- Navigation for seven sections: dashboard, students, groups, attendance, exams, grades, settings.
+- A database schema for teachers, groups, students, group memberships, attendance sessions and records, exams and grades, with row level security so each teacher only touches their own rows, plus triggers that check a student and a group belong to the same teacher.
+- A few unit tests (auth error messages, app routing).
 
-- Login page placeholder
+## Not built yet
 
-- Dashboard page
+QR attendance scanning, exam and grade entry, student management screens, student ID cards, WhatsApp or other parent messaging, and automation workflows. The schema reserves a `qr_token_hash` and a `photo_path` on students for later use; nothing uses them yet.
 
-- Sidebar navigation
+## Tech stack
 
-- Placeholder pages for Students, Groups, Attendance, Exams, Grades, and Settings
+- TanStack Start and TanStack Router (file-based routing), React 19, TypeScript
+- Vite, Tailwind CSS 4, shadcn/ui style components on Radix UI
+- Supabase (Postgres, Auth, row level security) through `@supabase/supabase-js`
+- React Hook Form and Zod, TanStack Query, Recharts
+- Vitest and Testing Library for tests
+- Scaffolded with [Lovable](https://lovable.dev)
 
-- TypeScript
+## Project layout
 
-- Reusable components
-
-- Professional educational visual style
-
-Do not connect Supabase yet.
-
-Do not create database tables or migrations.
-
-Do not add WhatsApp, n8n, QR, attendance logic, exam logic, or real data yet.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/06de1dfd-2304-4696-a9d5-d1dff34d2b6a).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
 ```
+src/
+  routes/          file-based routes (login, signup, _dashboard.*)
+  components/      layout (sidebar, page header), auth shell, ui components
+  integrations/supabase/   client, auth middleware, generated types
+  lib/             auth error messages and helpers
+supabase/
+  config.toml
+  migrations/      schema, RLS policies and triggers
+```
+
+## Run it locally
+
+You need Node.js and npm, and a Supabase project.
+
+1. Install dependencies: `npm install`
+2. Apply the SQL files in `supabase/migrations/` to your Supabase project.
+3. Create a `.env` file (it is not tracked by git) with your own project values:
+   ```
+   VITE_SUPABASE_URL=...
+   VITE_SUPABASE_PUBLISHABLE_KEY=...
+   SUPABASE_URL=...
+   SUPABASE_PUBLISHABLE_KEY=...
+   ```
+   Use the project's publishable (anon) key only. Never put a service role key in this file.
+4. Start the dev server: `npm run dev`
+
+Other scripts: `npm run build`, `npm run test`, `npm run lint`.
+
+## Author
+
+Abdalla Elsayed, Faculty of Computers and Information, Suez Canal University. Part of the Arab Automators team.
