@@ -30,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Environment files (local secrets and settings)
+.env
+.env.*
+!.env.example
